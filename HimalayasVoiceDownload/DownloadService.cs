@@ -24,8 +24,8 @@ namespace HimalayasVoiceDownload
             }
 
             Console.WriteLine($"开始下载专辑-{albumName}");
-            int totalPage = HtmlParseService.GetAlbumTotalPage(albumHtml);
-            for (int i = 1; i <= totalPage; i++)
+            var totalPage = HtmlParseService.GetAlbumTotalPage(albumHtml);
+            for (var i = 1; i <= totalPage; i++)
             {
                 var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(url + "?page=" + i));
                 foreach (var sound in sounds)
