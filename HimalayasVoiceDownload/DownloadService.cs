@@ -32,7 +32,7 @@ namespace HimalayasVoiceDownload
             var albumHtml = DownloadHtml(album.Url);
             int totalPage = HtmlParseService.GetAlbumTotalPage(albumHtml);
             var tasks = new List<Task>();
-            for (int i = 3; i <= totalPage; i++)
+            for (int i = 1; i <= totalPage; i++)
             {
                 var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(album.Url + "?page=" + i));
                 tasks.Add(Task.Run(() =>
