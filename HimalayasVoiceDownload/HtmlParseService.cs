@@ -33,6 +33,12 @@ namespace UcpaasVoiceDownload
             return pageNodes.Select(p => int.Parse(p.Attributes["data-page"]?.Value ?? "0")).Max();
         }
 
+        public string GetAlbumTitle(string html)
+        {
+            var doc = GetHtmlNode(html);
+            return doc.CssSelect(".detailContent_title h1").First().InnerText;
+        }
+
         private HtmlNode GetHtmlNode(string html)
         {
             var htmlDocument = new HtmlDocument();

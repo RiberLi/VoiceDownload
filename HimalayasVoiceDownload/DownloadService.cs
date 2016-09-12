@@ -20,21 +20,24 @@ namespace HimalayasVoiceDownload
             }
         }
 
-        public void DownloadAlbum(Album album)
+        public void DownloadAlbum(string url)
         {
-            Console.WriteLine($"开始下载专辑-{album.Name}");
+            var albumHtml = DownloadHtml(url);
+            var albumName = HtmlParseService.GetAlbumTitle(albumHtml);
+
             var downloadPath = ConfigurationManager.AppSettings["DownloadPath"];
-            var folder = Path.Combine(downloadPath, album.Name);
+            var folder = Path.Combine(downloadPath, albumName);
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
-            var albumHtml = DownloadHtml(album.Url);
+
+            Console.WriteLine($"开始下载专辑-{url}");
             int totalPage = HtmlParseService.GetAlbumTotalPage(albumHtml);
             var tasks = new List<Task>();
             for (int i = 1; i <= totalPage; i++)
             {
-                var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(album.Url + "?page=" + i));
+                var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(url + "?page=" + i));
                 tasks.Add(Task.Run(() =>
                 {
                     foreach (var sound in sounds)
