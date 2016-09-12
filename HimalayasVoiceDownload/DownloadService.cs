@@ -9,13 +9,7 @@ namespace HimalayasVoiceDownload
 {
     public class DownloadService
     {
-        public HtmlParseService HtmlParseService
-        {
-            get
-            {
-                return new HtmlParseService();
-            }
-        }
+        public HtmlParseService HtmlParseService { get; } = new HtmlParseService();
 
         public void DownloadAlbum(string url)
         {
