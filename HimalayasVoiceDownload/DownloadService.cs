@@ -30,7 +30,7 @@ namespace HimalayasVoiceDownload
                 Directory.CreateDirectory(folder);
             }
 
-            Console.WriteLine($"开始下载专辑-{url}");
+            Console.WriteLine($"开始下载专辑-{albumName}");
             int totalPage = HtmlParseService.GetAlbumTotalPage(albumHtml);
             for (int i = 1; i <= totalPage; i++)
             {
