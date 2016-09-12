@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using UcpaasVoiceDownload;
 
 namespace HimalayasVoiceDownload
@@ -34,20 +32,15 @@ namespace HimalayasVoiceDownload
 
             Console.WriteLine($"开始下载专辑-{url}");
             int totalPage = HtmlParseService.GetAlbumTotalPage(albumHtml);
-            var tasks = new List<Task>();
             for (int i = 1; i <= totalPage; i++)
             {
                 var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(url + "?page=" + i));
-                tasks.Add(Task.Run(() =>
+                foreach (var sound in sounds)
                 {
-                    foreach (var sound in sounds)
-                    {
-                        Console.WriteLine($"开始下载声音-{sound.Name}");
-                        DownloadSound(sound, folder);
-                    }
-                }));
+                    Console.WriteLine($"开始下载声音-{sound.Name}");
+                    DownloadSound(sound, folder);
+                }
             }
-            Task.WhenAll(tasks).Wait();
         }
 
         private void DownloadSound(Sound sound, string folder)
