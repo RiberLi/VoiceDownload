@@ -26,11 +26,14 @@ namespace KTingVoiceDownload
 
             Console.WriteLine($"开始下载专辑-{albumName}");
             var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(url));
-            foreach (var sound in sounds.Skip(687))
+            var threadPool = new ThreadPool<Sound>(sounds.Skip(687));
+            threadPool.OnProcessData += sound =>
             {
                 Console.WriteLine($"开始下载声音-{sound.Name}");
                 DownloadSound(sound, folder);
-            }
+            };
+            threadPool.MaxThreadCount = 8;
+            threadPool.Start(false);
         }
 
         private void DownloadSound(Sound sound, string folder)
