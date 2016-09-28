@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace KTingVoiceDownload
 {
@@ -26,13 +26,13 @@ namespace KTingVoiceDownload
 
             Console.WriteLine($"开始下载专辑-{albumName}");
             var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(url));
-            var threadPool = new ThreadPool<Sound>(sounds.Skip(687));
+            var threadPool = new ThreadPool<Sound>(sounds.Skip(748));
             threadPool.OnProcessData += sound =>
             {
                 Console.WriteLine($"开始下载声音-{sound.Name}");
                 DownloadSound(sound, folder);
             };
-            threadPool.MaxThreadCount = 8;
+            threadPool.MaxThreadCount = 3;
             threadPool.Start(false);
         }
 

@@ -29,6 +29,9 @@ namespace HimalayasVoiceDownload
         {
             var doc = GetHtmlNode(html);
             var pageNodes = doc.CssSelect(".pagingBar_wrapper a");
+            if (pageNodes == null || !pageNodes.Any())
+                return 1;
+
             return pageNodes.Select(p => int.Parse(p.Attributes["data-page"]?.Value ?? "0")).Max();
         }
 

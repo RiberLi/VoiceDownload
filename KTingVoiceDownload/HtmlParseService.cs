@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using ScrapySharp.Extensions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KTingVoiceDownload
 {
@@ -14,13 +14,15 @@ namespace KTingVoiceDownload
             var soundNodes = doc.CssSelect("#hiddenresult dl dd");
             foreach (var soundNode in soundNodes)
             {
-                var checkNode = soundNode.CssSelect("span input").First();
-                var numberNode= soundNode.CssSelect(".text1 a").First();
+                var checkNode = soundNode.CssSelect(".text input").FirstOrDefault();
+                if (checkNode == null)
+                    continue;
+                var numberNode = soundNode.CssSelect(".text1 a").First();
                 var titleNode = soundNode.CssSelect(".text2 a").First();
                 sounds.Add(new Sound
                 {
                     Id = checkNode.Attributes["value"].Value,
-                    Name = numberNode.InnerText+" "+ titleNode.Attributes["title"].Value
+                    Name = numberNode.InnerText + " " + titleNode.Attributes["title"].Value
                 });
             }
             return sounds;
