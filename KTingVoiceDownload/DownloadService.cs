@@ -10,6 +10,8 @@ namespace KTingVoiceDownload
 {
     public class DownloadService
     {
+        private bool m_HasFailed = false;
+
         public HtmlParseService HtmlParseService { get; } = new HtmlParseService();
 
         public void DownloadAlbum(string url)
@@ -34,6 +36,11 @@ namespace KTingVoiceDownload
             };
             threadPool.MaxThreadCount = 3;
             threadPool.Start(false);
+
+            if (m_HasFailed)
+            {
+                DownloadAlbum(url);
+            }
         }
 
         private void DownloadSound(Sound sound, string folder)
@@ -48,6 +55,7 @@ namespace KTingVoiceDownload
             catch (Exception)
             {
                 Console.WriteLine($"!!!!!!下载声音-{sound.Name}失败");
+                m_HasFailed = true;
             }
         }
 
