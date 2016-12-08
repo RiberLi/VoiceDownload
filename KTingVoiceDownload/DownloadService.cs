@@ -25,8 +25,8 @@ namespace KTingVoiceDownload
             }
 
             Console.WriteLine($"开始下载专辑-{albumName}");
-            var sounds = HtmlParseService.GetAlbumSounds(DownloadHtml(url));
-            var threadPool = new ThreadPool<Sound>(sounds.Skip(748));
+            var sounds = HtmlParseService.GetAlbumSounds(albumHtml);
+            var threadPool = new ThreadPool<Sound>(sounds.Skip(1345));
             threadPool.OnProcessData += sound =>
             {
                 Console.WriteLine($"开始下载声音-{sound.Name}");
@@ -38,10 +38,17 @@ namespace KTingVoiceDownload
 
         private void DownloadSound(Sound sound, string folder)
         {
-            var soundJson = DownloadHtml(GetSoundInfoUrl(sound.Id));
-            var soundInfo = JsonConvert.DeserializeObject<SoundInfo>(soundJson);
-            var filePath = Path.Combine(folder, sound.Name + ".mp3");
-            DownloadFile(soundInfo.Data.DownloadUrl, filePath);
+            try
+            {
+                var soundJson = DownloadHtml(GetSoundInfoUrl(sound.Id));
+                var soundInfo = JsonConvert.DeserializeObject<SoundInfo>(soundJson);
+                var filePath = Path.Combine(folder, sound.Name + ".mp3");
+                DownloadFile(soundInfo.Data.DownloadUrl, filePath);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"!!!!!!下载声音-{sound.Name}失败");
+            }
         }
 
         private string GetSoundInfoUrl(string soundId)
